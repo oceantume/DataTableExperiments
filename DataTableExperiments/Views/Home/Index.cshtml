@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <table id="the-table" class="table table-hover" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- filled dynamically -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+<script>
+(function () {
+    $(document).ready(function () {
+        console.log('hey');
+
+        var table = $('#the-table').DataTable({
+            
+            serverSide: true,
+            paging: true,
+            ajax: '@Href("~/Home/GetData")',
+            columns: [
+                {
+                    data: 'id',
+                },
+                {
+                    data: 'name'
+                },
+                {
+                    data: 'value'
+                }
+            ]
+        });
+
+        $('#the-table tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        });
+
+        console.log(table);
+
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+    });
+})();
+</script>
+}
