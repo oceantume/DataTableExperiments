@@ -29,11 +29,9 @@
 @section scripts {
 <script>
 (function () {
-    $(document).ready(function () {
-        console.log('hey');
 
+    $(document).ready(function () {
         var table = $('#the-table').DataTable({
-            
             serverSide: true,
             paging: true,
             ajax: '@Href("~/Home/GetData")',
@@ -42,7 +40,7 @@
                     data: 'id',
                 },
                 {
-                    data: 'name'
+                    data: 'name',
                 },
                 {
                     data: 'value'
@@ -54,8 +52,6 @@
             var title = $(this).text();
             $(this).html('<input type="text" placeholder="Search ' + title + '" />');
         });
-
-        console.log(table);
 
         table.columns().every(function () {
             var that = this;
@@ -69,6 +65,7 @@
             });
         });
     });
+
 })();
 </script>
 }
