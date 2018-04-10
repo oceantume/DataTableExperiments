@@ -4,13 +4,12 @@ using DataTables.AspNet.Mvc5;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
 namespace DataTableExperiments.Controllers
 {
-    public class HomeController : Controller
+    public class MemoryArrayController : Controller
     {
         private class DataEntry
         {
@@ -19,17 +18,16 @@ namespace DataTableExperiments.Controllers
             public decimal Value { get; set; }
         }
 
-        private static readonly IList<DataEntry> s_data =
+        private static readonly IList<object[]> s_data =
             Enumerable.Range(1, 100000)
-                .Select((n) => new DataEntry
+                .Select((n) => new object[]
                 {
-                    Id = n,
-                    Name = "test " + n,
-                    Value = new decimal(new Random(n).NextDouble())
+                    n,
+                    "test " + n,
+                    new decimal(new Random(n).NextDouble())
                 }).ToList();
 
-
-
+        // GET: MemoryArray
         public ActionResult Index()
         {
             return View();
@@ -37,15 +35,15 @@ namespace DataTableExperiments.Controllers
 
         public ActionResult GetData(IDataTablesRequest request)
         {
-            
             var totalCount = s_data.Count;
             var query = s_data.AsEnumerable();
 
             var filtered = query
-                .DataTableSearch(e => e.Name, request.Search, request.Columns);
+                .DataTableSearchArray(e => e[1].ToString(), request.Search)
+                .DataTableSearchColumnsArray(request.Columns);
 
             var result = filtered
-                .DataTableSort(request.Columns)
+                .DataTableSortArray(request.Columns)
                 .Skip(request.Start)
                 .Take(request.Length);
             

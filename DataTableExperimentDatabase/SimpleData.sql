@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[SimpleData]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[Name] VARCHAR(100) NOT NULL DEFAULT 'Default Name',
+	[Value] DECIMAL NOT NULL DEFAULT 0,
+)
